@@ -28,18 +28,22 @@ std::array<std::array<double, MAX_LEVEL>, MAX_DATA> majority_table;
 std::vector<int> last_iteration;
 
 // function
-void StoreData(std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
-               std::ifstream &InputFile);
+void
+StoreData(std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
+          std::ifstream &InputFile);
 
-void Initialize_WorkerData(
+void
+Initialize_WorkerData(
     std::array<std::array<std::array<double, MAX_LEVEL>, MAX_LEVEL>,
                MAX_WORKER> &worker_data);
 
-void Initialize_Majority_Table(
+void
+Initialize_Majority_Table(
     std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> &majority_table);
 
-void Pretend_Label_Correct(
+void
+Pretend_Label_Correct(
     int count_n2,
     int count_n1,
     int count_0,
@@ -48,61 +52,63 @@ void Pretend_Label_Correct(
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> &majority_table,
     int row);
 
-void Clear_Count(int &count_n2,
-                 int &count_n1,
-                 int &count_0,
-                 int &count_1,
-                 int &count_2);
+void
+Clear_Count(int &count_n2,
+            int &count_n1,
+            int &count_0,
+            int &count_1,
+            int &count_2);
 
-void Recalculate_Worker_Scores(
+void
+Recalculate_Worker_Scores(
     std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
     std::array<std::array<std::array<double, MAX_LEVEL>, MAX_LEVEL>,
                MAX_WORKER> &worker_data,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> &majority_table);
 
-int Level_to_Index(int input);
+int
+Level_to_Index(int input);
 
-void Update_Estimate(
+void
+Update_Estimate(
     std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> &majority_table,
     std::array<std::array<std::array<double, MAX_LEVEL>, MAX_LEVEL>,
                MAX_WORKER> &worker_data);
 
-void Initialize_First_Iteration(
+void
+Initialize_First_Iteration(
     std::vector<int> &last_iteration,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> majority_table);
 
-void Check_If_Cover(
+void
+Check_If_Cover(
     std::vector<int> &last_iteration,
     std::vector<int> &new_iteration,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> majority_table);
 
-int Index_to_Level(int input)
+int
+Index_to_Level(int input)
 {
     int result = 0;
     switch (input)
     {
-    case 0:
-        result = -2;
-        break;
-    case 1:
-        result = -1;
-        break;
-    case 2:
-        result = 0;
-        break;
-    case 3:
-        result = 1;
-        break;
-    case 4:
-        result = 2;
-        break;
-    default:
-        break;
+        case 0:result = -2;
+            break;
+        case 1:result = -1;
+            break;
+        case 2:result = 0;
+            break;
+        case 3:result = 1;
+            break;
+        case 4:result = 2;
+            break;
+        default:break;
     }
     return result;
 }
-int main(int argc, char const *argv[])
+int
+main(int argc, char const *argv[])
 {
     /* code */
     using namespace std;
@@ -168,33 +174,29 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int Level_to_Index(int input)
+int
+Level_to_Index(int input)
 {
     int result = 0;
     switch (input)
     {
-    case -2:
-        result = 0;
-        break;
-    case -1:
-        result = 1;
-        break;
-    case 0:
-        result = 2;
-        break;
-    case 1:
-        result = 3;
-        break;
-    case 2:
-        result = 4;
-        break;
-    default:
-        break;
+        case -2:result = 0;
+            break;
+        case -1:result = 1;
+            break;
+        case 0:result = 2;
+            break;
+        case 1:result = 3;
+            break;
+        case 2:result = 4;
+            break;
+        default:break;
     }
     return result;
 }
 
-void Initialize_First_Iteration(
+void
+Initialize_First_Iteration(
     std::vector<int> &last_iteration,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> majority_table)
 {
@@ -203,22 +205,23 @@ void Initialize_First_Iteration(
         auto max =
             std::max_element(majority_table[i].begin(), majority_table[i].end());
         long position = std::distance(majority_table[i].begin(), max);
-        last_iteration.push_back(Index_to_Level((int)position));
+        last_iteration.push_back(Index_to_Level((int) position));
     }
 }
 
-void StoreData(std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
-               std::ifstream &InputFile)
+void
+StoreData(std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
+          std::ifstream &InputFile)
 {
     for (int i = 0; i < MAX_WORKER; ++i)
     {
         std::string line;
         if (getline(InputFile, line))
         {
-            char *token = strtok((char *)line.c_str(), " ");
+            char *token = strtok((char *) line.c_str(), " ");
             for (int j = 0; j < MAX_DATA; ++j)
             {
-                if (token != nullptr)
+                if (token!=nullptr)
                 {
                     input_data[i][j] = atoi(token);
                     token = strtok(nullptr, " ");
@@ -228,7 +231,8 @@ void StoreData(std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
     }
 }
 
-void Initialize_WorkerData(
+void
+Initialize_WorkerData(
     std::array<std::array<std::array<double, MAX_LEVEL>, MAX_LEVEL>,
                MAX_WORKER> &worker_data)
 {
@@ -241,7 +245,8 @@ void Initialize_WorkerData(
     }
 }
 
-void Initialize_Majority_Table(
+void
+Initialize_Majority_Table(
     std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> &majority_table)
 {
@@ -258,26 +263,20 @@ void Initialize_Majority_Table(
             int element = input_data[j][i];
             switch (element)
             {
-            case -2:
-                count_n2 += 1;
-                break;
-            case -1:
-                count_n1 += 1;
-                break;
-            case 0:
-                count_0 += 1;
-                break;
-            case 1:
-                count_1 += 1;
-                break;
-            case 2:
-                count_2 += 1;
-                break;
-            default:
-                std::cout << "Error" << std::endl;
-                //          std::cout << i << "-" << j << std::endl;
-                //          std::cout << input_data[i][j] << std::endl;
-                break;
+                case -2:count_n2 += 1;
+                    break;
+                case -1:count_n1 += 1;
+                    break;
+                case 0:count_0 += 1;
+                    break;
+                case 1:count_1 += 1;
+                    break;
+                case 2:count_2 += 1;
+                    break;
+                default:std::cout << "Error" << std::endl;
+                    //          std::cout << i << "-" << j << std::endl;
+                    //          std::cout << input_data[i][j] << std::endl;
+                    break;
             }
         }
         Pretend_Label_Correct(count_n2, count_n1, count_0, count_1, count_2,
@@ -286,7 +285,8 @@ void Initialize_Majority_Table(
     }
 }
 
-void Pretend_Label_Correct(
+void
+Pretend_Label_Correct(
     int count_n2,
     int count_n1,
     int count_0,
@@ -306,11 +306,12 @@ void Pretend_Label_Correct(
     majority_table[row][position] = 1;
 }
 
-void Clear_Count(int &count_n2,
-                 int &count_n1,
-                 int &count_0,
-                 int &count_1,
-                 int &count_2)
+void
+Clear_Count(int &count_n2,
+            int &count_n1,
+            int &count_0,
+            int &count_1,
+            int &count_2)
 {
     count_n2 = 0;
     count_n1 = 0;
@@ -319,7 +320,8 @@ void Clear_Count(int &count_n2,
     count_2 = 0;
 }
 
-void Recalculate_Worker_Scores(
+void
+Recalculate_Worker_Scores(
     std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
     std::array<std::array<std::array<double, MAX_LEVEL>, MAX_LEVEL>,
                MAX_WORKER> &worker_data,
@@ -353,28 +355,22 @@ void Recalculate_Worker_Scores(
     {
         for (int j = 0; j < MAX_DATA; ++j)
         {
-            if (majority_table[j][i] == 1)
+            if (majority_table[j][i]==1)
             {
                 // count occurrence based on index of array
                 switch (i)
                 {
-                case 0:
-                    occur_n2 += 1;
-                    break;
-                case 1:
-                    occur_n1 += 1;
-                    break;
-                case 2:
-                    occur_0 += 1;
-                    break;
-                case 3:
-                    occur_1 += 1;
-                    break;
-                case 4:
-                    occur_2 += 1;
-                    break;
-                default:
-                    break;
+                    case 0:occur_n2 += 1;
+                        break;
+                    case 1:occur_n1 += 1;
+                        break;
+                    case 2:occur_0 += 1;
+                        break;
+                    case 3:occur_1 += 1;
+                        break;
+                    case 4:occur_2 += 1;
+                        break;
+                    default:break;
                 }
             }
         }
@@ -391,28 +387,24 @@ void Recalculate_Worker_Scores(
             {
                 switch (j)
                 {
-                case 0:
-                    worker_data[i][j][k] = worker_data[i][j][k] / occur_n2;
-                    break;
-                case 1:
-                    worker_data[i][j][k] = worker_data[i][j][k] / occur_n1;
-                    break;
-                case 2:
-                    if (occur_0 == 0)
-                    {
-                        worker_data[i][j][k] = 0;
-                    }
-                    else
-                    {
-                        worker_data[i][j][k] = worker_data[i][j][k] / occur_0;
-                    }
-                    break;
-                case 3:
-                    worker_data[i][j][k] = worker_data[i][j][k] / occur_1;
-                    break;
-                case 4:
-                    worker_data[i][j][k] = worker_data[i][j][k] / occur_2;
-                    break;
+                    case 0:worker_data[i][j][k] = worker_data[i][j][k]/occur_n2;
+                        break;
+                    case 1:worker_data[i][j][k] = worker_data[i][j][k]/occur_n1;
+                        break;
+                    case 2:
+                        if (occur_0==0)
+                        {
+                            worker_data[i][j][k] = 0;
+                        }
+                        else
+                        {
+                            worker_data[i][j][k] = worker_data[i][j][k]/occur_0;
+                        }
+                        break;
+                    case 3:worker_data[i][j][k] = worker_data[i][j][k]/occur_1;
+                        break;
+                    case 4:worker_data[i][j][k] = worker_data[i][j][k]/occur_2;
+                        break;
                 }
             }
         }
@@ -420,7 +412,8 @@ void Recalculate_Worker_Scores(
     //  std::cout << "test" << std::endl;
 }
 
-void Update_Estimate(
+void
+Update_Estimate(
     std::array<std::array<int, MAX_DATA>, MAX_WORKER> &input_data,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> &majority_table,
     std::array<std::array<std::array<double, MAX_LEVEL>, MAX_LEVEL>,
@@ -456,7 +449,8 @@ void Update_Estimate(
     //  std::cout << "Test" << std::endl;
 }
 
-void Check_If_Cover(
+void
+Check_If_Cover(
     std::vector<int> &last_iteration,
     std::vector<int> &new_iteration,
     std::array<std::array<double, MAX_LEVEL>, MAX_DATA> majority_table)
@@ -466,11 +460,11 @@ void Check_If_Cover(
         auto max =
             std::max_element(majority_table[i].begin(), majority_table[i].end());
         long position = std::distance(majority_table[i].begin(), max);
-        new_iteration.push_back(Index_to_Level((int)position));
+        new_iteration.push_back(Index_to_Level((int) position));
     }
 
     // compare with last iteration result
-    if (last_iteration == new_iteration)
+    if (last_iteration==new_iteration)
     {
         STOP = true;
     }
